@@ -1,5 +1,5 @@
 FROM node:16-alpine as build
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY package.json ./
 RUN npm install --silent
 COPY . .
@@ -8,12 +8,12 @@ CMD [ "npm", "run", "build" ]
 
 
 FROM node:16-alpine as production
-WORKDIR /usr/src/app
-COPY --from=build /usr/src/app/dist ./dist
-COPY --from=build /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/package.json ./package.json
-COPY --from=build /usr/src/app/prisma ./prisma
-COPY --from=build /usr/src/app/.env ./.env
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/prisma ./prisma
+COPY --from=build /app/.env ./.env
 
 
 EXPOSE 3000

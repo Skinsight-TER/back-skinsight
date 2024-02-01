@@ -26,4 +26,5 @@ services:
       - postgres
 
 volumes:
-  postgres:
+  - .:/app
+  - /app/node_modules
