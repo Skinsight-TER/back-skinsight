@@ -15,25 +15,19 @@ jobs:
 
     steps:
     - name: Check out the repository
-      uses: actions/checkout@v3 # Update to v3 for newer features
+      uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+    - name: Set up Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker.io
+        sudo systemctl start docker
 
     - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      run: echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: dakeinu/backskinsight:latest
-        cache-from: type=local,src=/tmp/.buildx-cache
-        cache-to: type=local,dest=/tmp/.buildx-cache
+    - name: Build Docker image
+      run: docker build -t dakeinu/backskinsight:latest -f ./Dockerfile .
 
-    # Ajoutez ici les étapes de déploiement
+    - name: Push Docker image to Docker Hub
+      run: docker push dakeinu/backskinsight:latest
