@@ -1,0 +1,20 @@
+name: Snyk Security Check
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Run Snyk to check for vulnerabilities
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Assurez-vous de configurer cela dans les secrets de votre dépôt
+      with:
+        args: --severity-threshold=high # Échec de la commande si des vulnérabilités de niveau 'high' sont trouvées
