@@ -34,10 +34,3 @@ jobs:
         with:
           command: code test --sarif
           args: --sarif-file-output=snyk_code_test.sarif --severity-threshold=high --fail-on=all
-      - name: Run Snyk monitor
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          command: monitor
-          args: --severity-threshold=high --fail-on=all
