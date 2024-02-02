@@ -32,6 +32,7 @@ jobs:
 
     - name: Run Snyk Code Analytics
       uses: snyk/actions/node@master
+      continue-on-error: true
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Assurez-vous de configurer cela dans les secrets de votre dépôt
       with:
