@@ -28,7 +28,6 @@ jobs:
           args: --sarif-file-output=snyk_test.sarif --severity-threshold=high --fail-on=all
       - name: Run Snyk code test
         uses: snyk/actions/node@master
-        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
