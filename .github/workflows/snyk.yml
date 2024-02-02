@@ -19,4 +19,4 @@ jobs:
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Assurez-vous de configurer cela dans les secrets de votre dépôt
       with:
-        args: --severity-threshold=high --fail-on=all# Échec de la commande si des vulnérabilités de niveau 'high' sont trouvées
+        args: --severity-threshold=high --fail-on=all # Échec de la commande si des vulnérabilités de niveau 'high' sont trouvées
