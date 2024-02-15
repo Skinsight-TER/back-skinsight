@@ -3,6 +3,7 @@ services:
 
   postgres:
     image: postgres:13.5
+    container_name: postgres
     restart: always
     environment:
       - POSTGRES_USER=myuser
@@ -11,6 +12,18 @@ services:
       - postgres:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+
+    nestjs:
+      image: dakeinu/backskinsight:latest
+      build: .
+      container_name: backskinsight
+      restart: always
+      environment:
+        DATABASE_URL: ${DATABASE_URL}
+      ports:
+        - '3000:3000'
+      depends_on:
+        - postgres
 
 volumes:
   postgres:
