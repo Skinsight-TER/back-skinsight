@@ -1,8 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreatePreconsultationDto } from './dto/create-preconsultation.dto';
-import { UpdatePreconsultationDto } from './dto/update-preconsultation.dto';
-import { PrismaClient, Status } from '@prisma/client';
-import { GeneralisteService } from 'src/generaliste/generaliste.service';
+import { Inject, Injectable } from "@nestjs/common";
+import { CreatePreconsultationDto } from "./dto/create-preconsultation.dto";
+import { UpdatePreconsultationDto } from "./dto/update-preconsultation.dto";
+import { PrismaClient, Status } from "@prisma/client";
+import { GeneralisteService } from "src/generaliste/generaliste.service";
+import { IaService } from "src/ia/ia.service";
 
 @Injectable()
 export class PreconsultationService {
@@ -11,7 +12,13 @@ export class PreconsultationService {
   @Inject(GeneralisteService)
   private readonly generalisteService: GeneralisteService;
 
-  async create(createPreconsultationDto: CreatePreconsultationDto) {
+  @Inject(IaService)
+  private readonly iaService: IaService;
+
+  async create(
+    createPreconsultationDto: CreatePreconsultationDto,
+    patientId: string,
+  ) {
     //get list of generaliste
     const generalisteList = await this.generalisteService.findAll();
     //si premiere preconsultation
@@ -19,7 +26,7 @@ export class PreconsultationService {
     //regarder ceux qui on le moins de preconsultation
     //prendre un random parmis les généralistes qui on le moins de preconsultation en attente
     const userPreconsulataion = await this.findAllByUser(
-      '46a86d69-67bd-4b66-81e4-b2cb9e665cee',
+      patientId,
     );
 
     let generaliste = generalisteList[0];
@@ -73,9 +80,52 @@ export class PreconsultationService {
     });
   }
 
-  update(id: number, updatePreconsultationDto: UpdatePreconsultationDto) {
-    return `This action updates a #${id} preconsultation`;
+  async findAllByGeneraliste(id: string) {
+    return await this.prisma.preconsultation.findMany({
+      where: {
+        generalisteId: id,
+      },
+    });
   }
+
+  async findOne(id: string) {
+    const preconsultation = await this.prisma.preconsultation.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        generaliste: true,
+        patient: true,
+      },
+    });
+
+    if (preconsultation.infoPatient['messageIA'] === '') {
+      return await this.prisma.preconsultation.update({
+        where: {
+          id: preconsultation.id,
+        },
+        data: {
+          infoPatient: {
+            messageIA: await this.iaService.sendMessageIA(),
+          },
+        },
+      });
+    }
+    return preconsultation;
+  }
+
+  update(id: string, updatePreconsultationDto: UpdatePreconsultationDto) {
+
+    return this.prisma.preconsultation.update({
+      where: {
+        id: id,
+      },
+      data: {
+        status: updatePreconsultationDto.status,
+      },
+    });
+  };
+
 
   remove(id: number) {
     return `This action removes a #${id} preconsultation`;
