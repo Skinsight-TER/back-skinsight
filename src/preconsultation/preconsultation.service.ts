@@ -1,9 +1,8 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { CreatePreconsultationDto } from "./dto/create-preconsultation.dto";
-import { UpdatePreconsultationDto } from "./dto/update-preconsultation.dto";
-import { PrismaClient, Status } from "@prisma/client";
-import { GeneralisteService } from "src/generaliste/generaliste.service";
-import { IaService } from "src/ia/ia.service";
+import { Inject, Injectable } from '@nestjs/common';
+import { PreconsultationDto } from './dto/preconsultation.dto';
+import { PrismaClient, Status } from '@prisma/client';
+import { GeneralisteService } from 'src/generaliste/generaliste.service';
+import { IaService } from 'src/ia/ia.service';
 
 @Injectable()
 export class PreconsultationService {
@@ -15,19 +14,14 @@ export class PreconsultationService {
   @Inject(IaService)
   private readonly iaService: IaService;
 
-  async create(
-    createPreconsultationDto: CreatePreconsultationDto,
-    patientId: string,
-  ) {
+  async create(preconsultationDto: PreconsultationDto, patientId: string) {
     //get list of generaliste
     const generalisteList = await this.generalisteService.findAll();
     //si premiere preconsultation
     //prendre tout les generalistes
     //regarder ceux qui on le moins de preconsultation
     //prendre un random parmis les généralistes qui on le moins de preconsultation en attente
-    const userPreconsulataion = await this.findAllByUser(
-      patientId,
-    );
+    const userPreconsulataion = await this.findAllByUser(patientId);
 
     let generaliste = generalisteList[0];
     if (userPreconsulataion.length === 0) {
@@ -59,11 +53,11 @@ export class PreconsultationService {
 
     const preconsultaionCreate = await this.prisma.preconsultation.create({
       data: {
-        status: createPreconsultationDto.status,
-        description: createPreconsultationDto.description,
-        patientId: createPreconsultationDto.patientId,
+        status: preconsultationDto.status,
+        description: preconsultationDto.description,
+        patientId: preconsultationDto.patientId,
         generalisteId: generaliste.id,
-        infoPatient: createPreconsultationDto.infoPatient,
+        infoPatient: preconsultationDto.infoPatient,
       },
     });
     return {
@@ -100,7 +94,7 @@ export class PreconsultationService {
     });
 
     if (preconsultation.infoPatient['messageIA'] === '') {
-      return await this.prisma.preconsultation.update({
+      return this.prisma.preconsultation.update({
         where: {
           id: preconsultation.id,
         },
@@ -114,18 +108,20 @@ export class PreconsultationService {
     return preconsultation;
   }
 
-  update(id: string, updatePreconsultationDto: UpdatePreconsultationDto) {
-
+  finishPreconsultation(id: string, nextStep: string) {
     return this.prisma.preconsultation.update({
       where: {
         id: id,
       },
       data: {
-        status: updatePreconsultationDto.status,
+        status: Status.DONE,
+        infoPatient: {
+          nextStep: nextStep['nextStep'],
+          messageGeneraliste: nextStep['messageGeneraliste'],
+        },
       },
     });
-  };
-
+  }
 
   remove(id: number) {
     return `This action removes a #${id} preconsultation`;

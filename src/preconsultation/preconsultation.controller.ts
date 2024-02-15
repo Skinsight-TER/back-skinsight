@@ -3,12 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { PreconsultationService } from './preconsultation.service';
-import { CreatePreconsultationDto } from './dto/create-preconsultation.dto';
+import { PreconsultationDto } from './dto/preconsultation.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('preconsultation')
@@ -19,8 +19,8 @@ export class PreconsultationController {
   ) {}
 
   @Post()
-  create(@Body() createPreconsultationDto: CreatePreconsultationDto, patientId: string) {
-    return this.preconsultationService.create(createPreconsultationDto, patientId);
+  create(@Body() preconsultationDto: PreconsultationDto, patientId: string) {
+    return this.preconsultationService.create(preconsultationDto, patientId);
   }
 
   @Get('/patient/:id')
@@ -31,6 +31,14 @@ export class PreconsultationController {
   @Get('/generaliste/:id')
   findAllByGeneraliste(@Param('id') id: string) {
     return this.preconsultationService.findAllByGeneraliste(id);
+  }
+
+  @Put('/:id/finish')
+  finishPreconsultation(@Param('id') id: string, @Body() nextStep: string) {
+    return this.preconsultationService.finishPreconsultation(
+      id,
+      nextStep,
+    );
   }
 
   @Get(':id')
