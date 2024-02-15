@@ -19,13 +19,23 @@ export class PreconsultationController {
   ) {}
 
   @Post()
-  create(@Body() createPreconsultationDto: CreatePreconsultationDto) {
-    return this.preconsultationService.create(createPreconsultationDto);
+  create(@Body() createPreconsultationDto: CreatePreconsultationDto, patientId: string) {
+    return this.preconsultationService.create(createPreconsultationDto, patientId);
   }
 
   @Get('/patient/:id')
   findAllByUser(@Param('id') id: string) {
     return this.preconsultationService.findAllByUser(id);
+  }
+
+  @Get('/generaliste/:id')
+  findAllByGeneraliste(@Param('id') id: string) {
+    return this.preconsultationService.findAllByGeneraliste(id);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.preconsultationService.findOne(String(id));
   }
 
   @Delete(':id')

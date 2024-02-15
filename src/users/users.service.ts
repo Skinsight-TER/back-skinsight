@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 // This should be a real class/interface representing a user entity
 
 @Injectable()
 export class UsersService {
-
-  prisma = new PrismaClient()
+  prisma = new PrismaClient();
 
   async findOne(email: string): Promise<User | undefined | void | any> {
     return await this.prisma.user.findUnique({
@@ -17,7 +17,11 @@ export class UsersService {
   }
 
   async register(user: User) {
-    console.log('user ---------------', user);
+    //enregistre le mot de passe chiffrer avec bcrypt dans la base de donnée
+
+    const salt = 10;
+    const passwordHash = await bcrypt.hash(user.password, salt);
+
     const patient = await this.prisma.user.create({
       data: {
         email: user.email,
@@ -25,7 +29,7 @@ export class UsersService {
         lastName: user.lastName,
         gender: user.gender,
         age: user.age,
-        password: user.password,
+        password: passwordHash,
       },
     });
     return await this.prisma.patient.create({
