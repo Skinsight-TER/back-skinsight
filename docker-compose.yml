@@ -13,17 +13,17 @@ services:
     ports:
       - '5432:5432'
 
-    nestjs:
-      image: dakeinu/backskinsight:latest
-      build: .
-      container_name: backskinsight
-      restart: always
-      environment:
-        DATABASE_URL: ${DATABASE_URL}
-      ports:
-        - '3000:3000'
-      depends_on:
-        - postgres
+  nestjs:
+    image: dakeinu/backskinsight:latest
+    build: .
+    container_name: backskinsight
+    restart: always
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@postgres:5432/median-db
+    ports:
+      - '3002:3002'
+    depends_on:
+      - postgres
 
 volumes:
   postgres:
