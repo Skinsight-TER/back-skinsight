@@ -8,6 +8,8 @@ import { PatientModule } from './patient/patient.module';
 import { PreconsultationModule } from './preconsultation/preconsultation.module';
 import { GeneralisteModule } from './generaliste/generaliste.module';
 import { IaModule } from './ia/ia.module';
+import { DermatologistModule } from './dermatologist/dermatologist.module';
+import { ConversationModule } from './conversation/conversation.module';
 @Module({
   imports: [
     PrismaModule,
@@ -17,6 +19,8 @@ import { IaModule } from './ia/ia.module';
     PreconsultationModule,
     GeneralisteModule,
     IaModule,
+    DermatologistModule,
+    ConversationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

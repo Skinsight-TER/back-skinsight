@@ -23,7 +23,7 @@ enum Gender {
 model User {
   id            String         @id @default(uuid())
   email         String         @unique
-  firstName    String
+  firstName     String
   lastName      String
   gender        Gender
   age           Int
@@ -33,6 +33,7 @@ model User {
   patient       Patient?
   generaliste   Generaliste?
   dermatologist Dermatologist?
+  Message       Message[]
 }
 
 model Patient {
@@ -137,6 +138,7 @@ model Message {
   content        String
   date           DateTime
   userId         String
+  user           User         @relation(fields: [userId], references: [id])
   conversation   Conversation @relation(fields: [conversationId], references: [id])
   conversationId String
 }
