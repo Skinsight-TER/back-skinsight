@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Status } from '@prisma/client';
 
-export class CreatePreconsultationDto {
+export class PreconsultationDto {
   @ApiProperty()
   status: Status;
 

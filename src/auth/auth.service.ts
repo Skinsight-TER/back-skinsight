@@ -3,6 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { JwtPayload } from 'jsonwebtoken';
+import { jwtConstants } from './constants';
 
 @Injectable()
 export class AuthService {
@@ -35,5 +37,17 @@ export class AuthService {
     }
 
     return null;
+  }
+
+  public async getUserFromAuthenticationToken(token: string) {
+    const payload: JwtPayload = this.jwtService.verify(token, {
+      secret: jwtConstants.secret,
+    });
+
+    const userId = payload.sub;
+
+    if (userId) {
+      return this.usersService.findOne(userId);
+    }
   }
 }
