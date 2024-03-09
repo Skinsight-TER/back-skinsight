@@ -46,7 +46,7 @@ export class IaService {
       const completionChunks = response.data.choices;
       completionChunks.forEach((chunk) => {
         if (chunk.delta && chunk.delta.content) {
-          console.log(chunk.delta.content);
+          // console.log(chunk.delta.content);
         }
       });
     } catch (error) {
