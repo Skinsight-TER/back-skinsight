@@ -5,7 +5,11 @@ import * as cookieParser from 'cookie-parser';
 import { nestCsrf } from 'ncsrf';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin: 'http://localhost:3000', // Autoriser les requêtes de ce domaine
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   app.use(cookieParser());
   app.use(nestCsrf());
