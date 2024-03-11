@@ -1,9 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PatientService } from './patient.service';
-import { CreatePatientDto } from './dto/create-patient.dto';
-import { UpdatePatientDto } from './dto/update-patient.dto';
-import { Csrf } from "ncsrf/dist";
-import { ApiTags } from "@nestjs/swagger";
+import { Csrf } from 'ncsrf/dist';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('patient')
 @ApiTags('patient')
@@ -12,8 +18,8 @@ export class PatientController {
 
   @Post()
   @Csrf()
-  create(@Body() createPatientDto: CreatePatientDto) {
-    return this.patientService.create(createPatientDto);
+  create() {
+    return this.patientService.create();
   }
 
   @Get()
@@ -30,13 +36,25 @@ export class PatientController {
 
   @Patch(':id')
   @Csrf()
-  update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
-    return this.patientService.update(+id, updatePatientDto);
+  update(@Param('id') id: string) {
+    return this.patientService.update(+id);
   }
 
   @Delete(':id')
   @Csrf()
   remove(@Param('id') id: string) {
     return this.patientService.remove(+id);
+  }
+
+  @Get(':id/images')
+  @Csrf()
+  getImages(@Param('id') id: string) {
+    return this.patientService.getImages(id);
+  }
+
+  @Post(':id/images')
+  @Csrf()
+  uploadImage(@Param('id') id: string, @Body() image: any) {
+    return this.patientService.uploadImage(id, image);
   }
 }

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePatientDto } from './dto/create-patient.dto';
-import { UpdatePatientDto } from './dto/update-patient.dto';
+import { Image, PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PatientService {
-  create(createPatientDto: CreatePatientDto) {
+  prisma = new PrismaClient();
+
+  create() {
     return 'This action adds a new patient';
   }
 
@@ -16,11 +17,35 @@ export class PatientService {
     return `This action returns a #${id} patient`;
   }
 
-  update(id: number, updatePatientDto: UpdatePatientDto) {
+  update(id: number) {
     return `This action updates a #${id} patient`;
   }
 
   remove(id: number) {
     return `This action removes a #${id} patient`;
+  }
+
+  getImages(id: string) {
+    return this.prisma.patient.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        Image: true,
+      },
+    });
+  }
+
+  uploadImage(id: string, image: Image) {
+    return this.prisma.patient.update({
+      where: {
+        id: id,
+      },
+      data: {
+        Image: {
+          create: image,
+        },
+      },
+    });
   }
 }

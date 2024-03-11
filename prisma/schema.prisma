@@ -44,6 +44,7 @@ model Patient {
   userId          String            @unique
   preconsultation Preconsultation[]
   Appointment     Appointment[]
+  Image           Image[]
 }
 
 model Generaliste {
@@ -78,6 +79,7 @@ model Preconsultation {
   generaliste   Generaliste? @relation(fields: [generalisteId], references: [id])
   generalisteId String?
   infoPatient   Json
+  Image         Image[]
 }
 
 model Subject {
@@ -141,4 +143,15 @@ model Message {
   user           User         @relation(fields: [userId], references: [id])
   conversation   Conversation @relation(fields: [conversationId], references: [id])
   conversationId String
+}
+
+model Image {
+  id                String          @id @default(uuid())
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  url               String
+  patient           Patient         @relation(fields: [patientId], references: [id])
+  patientId         String
+  preconsultation   Preconsultation @relation(fields: [preconsultationId], references: [id])
+  preconsultationId String
 }

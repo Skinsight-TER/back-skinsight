@@ -16,4 +16,7 @@ export class PreconsultationDto {
 
   @ApiProperty()
   infoPatient: string;
+
+  @ApiProperty()
+  image: any;
 }
