@@ -10,7 +10,6 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  @Csrf()
   @ApiOkResponse({ type: AuthEntity })
   login(user: any) {
     return this.authService.login(user);

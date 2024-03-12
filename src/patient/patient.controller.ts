@@ -17,37 +17,31 @@ export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
   @Get()
-  @Csrf()
   findAll() {
     return this.patientService.findAll();
   }
 
   @Get(':id')
-  @Csrf()
   findOne(@Param('id') id: string) {
     return this.patientService.findOne(+id);
   }
 
   @Patch(':id')
-  @Csrf()
   update(@Param('id') id: string) {
     return this.patientService.update(+id);
   }
 
   @Delete(':id')
-  @Csrf()
   remove(@Param('id') id: string) {
     return this.patientService.remove(+id);
   }
 
   @Get(':id/images')
-  @Csrf()
   getImages(@Param('id') id: string) {
     return this.patientService.getImages(id);
   }
 
   @Post(':id/images')
-  @Csrf()
   uploadImage(@Param('id') id: string, @Body() image: any) {
     return this.patientService.uploadImage(id, image);
   }
