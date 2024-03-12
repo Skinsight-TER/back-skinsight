@@ -90,7 +90,6 @@ export class PreconsultationService {
       include: {
         generaliste: true,
         patient: true,
-        Image: true,
       },
     });
 
