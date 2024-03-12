@@ -16,12 +16,6 @@ import { ApiTags } from '@nestjs/swagger';
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
-  @Post()
-  @Csrf()
-  create() {
-    return this.patientService.create();
-  }
-
   @Get()
   @Csrf()
   findAll() {

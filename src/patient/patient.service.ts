@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Image, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PatientService {
   prisma = new PrismaClient();
-
-  create() {
-    return 'This action adds a new patient';
-  }
 
   findAll() {
     return `This action returns all patient`;
@@ -36,14 +32,16 @@ export class PatientService {
     });
   }
 
-  uploadImage(id: string, image: Image) {
+  uploadImage(id: string, image: any) {
     return this.prisma.patient.update({
       where: {
         id: id,
       },
       data: {
         Image: {
-          create: image,
+          create: {
+            url: image.url,
+          },
         },
       },
     });
