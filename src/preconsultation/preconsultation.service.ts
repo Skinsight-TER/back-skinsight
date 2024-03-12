@@ -58,7 +58,6 @@ export class PreconsultationService {
         patientId: preconsultationDto.patientId,
         generalisteId: generaliste.id,
         infoPatient: preconsultationDto.infoPatient,
-        Image: preconsultationDto.image,
       },
     });
     return {
