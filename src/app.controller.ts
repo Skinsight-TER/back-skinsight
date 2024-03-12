@@ -16,7 +16,6 @@ export class AppController {
   }
 
   @Post('auth/register')
-  @Csrf()
   async register(@Request() req) {
     return this.authService.register(req.body);
   }
