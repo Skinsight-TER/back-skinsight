@@ -8,7 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PatientService } from './patient.service';
-import { Csrf } from 'ncsrf/dist';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('patient')

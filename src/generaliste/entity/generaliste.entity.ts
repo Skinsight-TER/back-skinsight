@@ -1,11 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Preconsultation } from '../../preconsultation/entities/preconsultation.entity';
 import { IsDate, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Preconsultation } from '../../preconsultation/entities/preconsultation.entity';
-import { Image } from "@prisma/client";
+import { Conversation } from '../../conversation/entities/conversation.entity';
 
-export class Patient {
-
+export class Generaliste {
   @ApiProperty()
   @IsString()
   id: string;
@@ -19,14 +18,14 @@ export class Patient {
   updatedAt: Date;
 
   @ApiProperty()
+  @IsString()
+  userId: string;
+
+  @ApiProperty()
   @Type(() => Preconsultation)
   Preconsultation: Preconsultation[];
-  /*
+
   @ApiProperty()
-  @Type(() => Appointment)
-  Appointment: Appointment[];
-  */
-  @ApiProperty()
-  @Type(() => Image)
-  Image: Image[];
+  @Type(() => Conversation)
+  Conversation: Conversation[];
 }

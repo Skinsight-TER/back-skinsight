@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsString } from 'class-validator';
 
-export class Preconsultation {
+export class Message {
   @ApiProperty()
   @IsString()
   id: string;
@@ -16,21 +16,17 @@ export class Preconsultation {
 
   @ApiProperty()
   @IsString()
-  status: string;
+  content: string;
+
+  @ApiProperty()
+  @IsDate()
+  date: Date;
 
   @ApiProperty()
   @IsString()
-  description: string;
+  userId: string;
 
   @ApiProperty()
   @IsString()
-  patientId: string;
-
-  @ApiProperty()
-  @IsString()
-  generalisteId: string;
-
-  @ApiProperty()
-  @IsString()
-  infoPatient: string;
+  conversationId: string;
 }
