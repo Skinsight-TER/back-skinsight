@@ -10,7 +10,6 @@ import {
 import { PreconsultationService } from './preconsultation.service';
 import { PreconsultationDto } from './dto/preconsultation.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Csrf } from 'ncsrf/dist';
 
 @Controller('preconsultation')
 @ApiTags('preconsultation')
